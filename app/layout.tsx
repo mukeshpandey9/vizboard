@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 
 import { Loading } from "@/components/auth/loading";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { Toaster } from "@/components/ui/sonner";
 import { siteConfig } from "@/config";
 import { ConvexClientProvider } from "@/providers/convex-client-provider";
@@ -16,6 +17,10 @@ export const metadata: Metadata = siteConfig;
 
 export const viewport: Viewport = {
   themeColor: "#fff",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -26,13 +31,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Suspense fallback={<Loading />}>
-          <ConvexClientProvider>
-            <Toaster theme="light" closeButton richColors />
-            <ModalProvider />
-            {children}
-          </ConvexClientProvider>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<Loading />}>
+            <ConvexClientProvider>
+              <Toaster theme="light" closeButton richColors />
+              <ModalProvider />
+              {children}
+            </ConvexClientProvider>
+          </Suspense>
+        </ErrorBoundary>
       </body>
     </html>
   );
