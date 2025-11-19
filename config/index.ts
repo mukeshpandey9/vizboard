@@ -9,7 +9,7 @@ export const siteConfig: Metadata = {
     "nextjs",
     "vercel",
     "react",
-    "miro",
+    "Vizboard",
     "board",
     "shadcn",
     "shadcn-ui",
@@ -40,11 +40,11 @@ export const siteConfig: Metadata = {
     "css",
   ] as Array<string>,
   authors: {
-    name: "Sanidhya Kumar Verma",
-    url: "https://github.com/sanidhyy",
+    name: "Mukesh Pandey",
+    url: "https://github.com/mukeshpandey9",
   },
 } as const;
 
 export const links = {
-  sourceCode: "https://github.com/sanidhyy/vizboard",
+  sourceCode: "https://github.com/mukeshpandey9/vizboard",
 } as const;

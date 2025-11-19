@@ -51,7 +51,7 @@ export const Info = ({ boardId }: InfoProps) => {
                 font.className,
               )}
             >
-              Miro
+              Vizboard
             </span>
           </Link>
         </Button>
