@@ -47,30 +47,30 @@ export const Text = ({
   };
 
   return (
-    <foreignObject
-      x={x}
-      y={y}
-      width={width}
-      height={height}
-      onPointerDown={(e) => onPointerDown(e, id)}
-      style={{
-        outline: selectionColor ? `1px solid ${selectionColor}` : "none",
-        transform: `rotate(${rotation || 0}deg)`,
-        transformOrigin: `${width / 2}px ${height / 2}px`,
-      }}
-    >
-      <ContentEditable
-        html={value || "Text"}
-        onChange={handleContentChange}
-        className={cn(
-          "h-full w-full flex items-center justify-center text-center drop-shadow-md outline-none",
-          font.className,
-        )}
+    <g transform={`translate(${x}, ${y}) rotate(${rotation || 0}, ${width / 2}, ${height / 2})`}>
+      <foreignObject
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        onPointerDown={(e) => onPointerDown(e, id)}
         style={{
-          fontSize: calculateFontSize(width, height),
-          color: fill ? colorToCSS(fill) : "#000",
+          outline: selectionColor ? `1px solid ${selectionColor}` : "none",
         }}
-      />
-    </foreignObject>
+      >
+        <ContentEditable
+          html={value || "Text"}
+          onChange={handleContentChange}
+          className={cn(
+            "h-full w-full flex items-center justify-center text-center drop-shadow-md outline-none",
+            font.className,
+          )}
+          style={{
+            fontSize: calculateFontSize(width, height),
+            color: fill ? colorToCSS(fill) : "#000",
+          }}
+        />
+      </foreignObject>
+    </g>
   );
 };

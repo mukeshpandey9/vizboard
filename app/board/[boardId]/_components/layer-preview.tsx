@@ -38,6 +38,7 @@ export const LayerPreview = memo(
             y={layer.y}
             fill={layer.fill ? colorToCSS(layer.fill) : "#000"}
             stroke={selectionColor}
+            rotation={layer.rotation}
           />
         );
       case LayerType.Note:

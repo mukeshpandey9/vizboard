@@ -1,7 +1,7 @@
 "use client";
 
-import { BringToFront, SendToBack, Trash2, RotateCw } from "lucide-react";
-import { memo } from "react";
+import { BringToFront, SendToBack, Trash2, RotateCw, RotateCcw } from "lucide-react";
+import { memo, useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Hint } from "@/components/hint";
@@ -11,6 +11,7 @@ import { useMutation, useSelf } from "@/liveblocks.config";
 import type { Camera, Color } from "@/types/canvas";
 
 import { ColorPicker } from "./color-picker";
+import { useStorage } from "@/liveblocks.config";
 
 type SelectionToolsProps = {
   camera: Camera;
@@ -20,6 +21,21 @@ type SelectionToolsProps = {
 export const SelectionTools = memo(
   ({ camera, setLastUsedColor }: SelectionToolsProps) => {
     const selection = useSelf((me) => me.presence.selection);
+    const [rotationAngle, setRotationAngle] = useState(0);
+
+    // Get current rotation from selected layer
+    const currentRotation = useStorage((root) => {
+      if (selection.length === 1) {
+        const layer = root.layers.get(selection[0]);
+        return layer?.rotation || 0;
+      }
+      return 0;
+    });
+
+    // Sync rotation angle with layer rotation
+    useEffect(() => {
+      setRotationAngle(currentRotation);
+    }, [currentRotation, selection]);
 
     const moveToFront = useMutation(
       ({ storage }) => {
@@ -76,14 +92,13 @@ export const SelectionTools = memo(
     );
 
     const rotateSelection = useMutation(
-      ({ storage }) => {
+      ({ storage }, angle: number) => {
         const liveLayers = storage.get("layers");
 
         selection.forEach((id) => {
           const layer = liveLayers.get(id);
           if (layer) {
-            const currentRotation = layer.get("rotation") || 0;
-            layer.update({ rotation: (currentRotation + 90) % 360 });
+            layer.update({ rotation: angle });
           }
         });
       },
@@ -124,10 +139,49 @@ export const SelectionTools = memo(
           </Hint>
         </div>
 
-        <div className="flex items-center pl-2 ml-2 border-l border-t-neutral-200">
-          <Hint label="Rotate 90°">
-            <Button variant="board" size="icon" onClick={rotateSelection}>
-              <RotateCw />
+        <div className="flex items-center gap-x-2 pl-2 ml-2 border-l border-t-neutral-200">
+          <Hint label="Rotate counter-clockwise">
+            <Button 
+              variant="board" 
+              size="icon" 
+              onClick={() => {
+                const newAngle = rotationAngle - 15;
+                setRotationAngle(newAngle);
+                rotateSelection(newAngle);
+              }}
+            >
+              <RotateCcw className="h-4 w-4" />
+            </Button>
+          </Hint>
+          <div className="flex flex-col items-center gap-y-1">
+            <input
+              type="range"
+              min="-180"
+              max="180"
+              value={rotationAngle}
+              onChange={(e) => {
+                const angle = parseInt(e.target.value);
+                setRotationAngle(angle);
+                rotateSelection(angle);
+              }}
+              className="w-24 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+              style={{
+                background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((rotationAngle + 180) / 360) * 100}%, #e5e7eb ${((rotationAngle + 180) / 360) * 100}%, #e5e7eb 100%)`
+              }}
+            />
+            <span className="text-xs text-gray-600 font-medium">{rotationAngle}°</span>
+          </div>
+          <Hint label="Rotate clockwise">
+            <Button 
+              variant="board" 
+              size="icon" 
+              onClick={() => {
+                const newAngle = rotationAngle + 15;
+                setRotationAngle(newAngle);
+                rotateSelection(newAngle);
+              }}
+            >
+              <RotateCw className="h-4 w-4" />
             </Button>
           </Hint>
         </div>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const siteConfig: Metadata = {
-  title: "Miro Clone",
+  title: "Vizboard",
   description:
-    "Revolutionary Miro clone: Real-time collaboration, versatile canvas, rich media, secure.",
+    "Revolutionary Vizboard: Real-time collaboration, versatile canvas, rich media, secure.",
   keywords: [
     "reactjs",
     "nextjs",
@@ -46,5 +46,5 @@ export const siteConfig: Metadata = {
 } as const;
 
 export const links = {
-  sourceCode: "https://github.com/sanidhyy/miro-clone",
+  sourceCode: "https://github.com/sanidhyy/vizboard",
 } as const;

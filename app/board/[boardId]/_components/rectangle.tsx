@@ -19,20 +19,18 @@ export const Rectangle = ({
   const { x, y, width, height, fill, rotation } = layer;
 
   return (
-    <rect
-      className="drop-shadow-md"
-      onPointerDown={(e) => onPointerDown(e, id)}
-      style={{
-        transform: `translate(${x}px, ${y}px) rotate(${rotation || 0}deg)`,
-        transformOrigin: `${width / 2}px ${height / 2}px`,
-      }}
-      x={0}
-      y={0}
-      width={width}
-      height={height}
-      strokeWidth={1}
-      fill={fill ? colorToCSS(fill) : "#000"}
-      stroke={selectionColor || "transparent"}
-    />
+    <g transform={`translate(${x}, ${y}) rotate(${rotation || 0}, ${width / 2}, ${height / 2})`}>
+      <rect
+        className="drop-shadow-md"
+        onPointerDown={(e) => onPointerDown(e, id)}
+        x={0}
+        y={0}
+        width={width}
+        height={height}
+        strokeWidth={1}
+        fill={fill ? colorToCSS(fill) : "#000"}
+        stroke={selectionColor || "transparent"}
+      />
+    </g>
   );
 };

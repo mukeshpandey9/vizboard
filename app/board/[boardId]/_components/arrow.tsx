@@ -16,10 +16,10 @@ export const Arrow = ({
   onPointerDown,
   selectionColor,
 }: ArrowProps) => {
-  const { x, y, width, height, fill } = layer;
+  const { x, y, width, height, fill, rotation } = layer;
 
-  const endX = x + width;
-  const endY = y + height;
+  const endX = width;
+  const endY = height;
   
   // Calculate arrow head
   const headLength = 15;
@@ -29,11 +29,19 @@ export const Arrow = ({
   const arrowPoint2X = endX - headLength * Math.cos(angle + Math.PI / 6);
   const arrowPoint2Y = endY - headLength * Math.sin(angle + Math.PI / 6);
 
+  // Calculate center point for rotation
+  const centerX = width / 2;
+  const centerY = height / 2;
+
   return (
-    <g className="drop-shadow-md" onPointerDown={(e) => onPointerDown(e, id)}>
+    <g 
+      className="drop-shadow-md" 
+      onPointerDown={(e) => onPointerDown(e, id)}
+      transform={`translate(${x}, ${y}) rotate(${rotation || 0}, ${centerX}, ${centerY})`}
+    >
       <line
-        x1={x}
-        y1={y}
+        x1={0}
+        y1={0}
         x2={endX}
         y2={endY}
         stroke={fill ? colorToCSS(fill) : "#000"}
@@ -46,8 +54,8 @@ export const Arrow = ({
       />
       {selectionColor && (
         <line
-          x1={x}
-          y1={y}
+          x1={0}
+          y1={0}
           x2={endX}
           y2={endY}
           stroke={selectionColor}
